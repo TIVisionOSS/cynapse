@@ -74,5 +74,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://gitlab.com/TIVisionOSS/crates/cynapse/-/compare/v0.1.0...HEAD
-[0.1.0]: https://gitlab.com/TIVisionOSS/crates/cynapse/-/tags/v0.1.0
+[Unreleased]: https://github.com/TIVisionOSS/cynapse/compare/v0.1.0...master
+[0.1.0]: https://github.com/TIVisionOSS/cynapse/releases/tag/v0.1.0

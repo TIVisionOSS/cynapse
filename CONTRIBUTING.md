@@ -34,13 +34,13 @@ We are committed to providing a welcoming and inclusive environment. Please:
 
 - Rust 1.70 or later
 - Git
-- A GitLab account (for merge requests)
+- A GitHub account (for pull requests)
 
 ### Setting Up Your Development Environment
 
 ```bash
 # Clone the repository
-git clone https://gitlab.com/TIVisionOSS/crates/cynapse.git
+git clone https://github.com/TIVisionOSS/cynapse.git
 cd cynapse
 
 # Build the project
@@ -65,14 +65,14 @@ cargo fmt
 
 ### 1. Find an Issue
 
-- Check the [issue tracker](https://gitlab.com/TIVisionOSS/crates/cynapse/-/issues)
+- Check the [issue tracker](https://github.com/TIVisionOSS/cynapse/issues)
 - Look for issues tagged `good-first-issue` or `help-wanted`
 - Comment on the issue to let others know you're working on it
 
 ### 2. Create a Branch
 
 ```bash
-# Create a new branch from main
+# Create a new branch from master
 git checkout -b feature/your-feature-name
 
 # Or for bug fixes
@@ -109,13 +109,13 @@ git commit -m "fix: resolve issue #123"
 - `perf: description` — Performance improvements
 - `chore: description` — Maintenance tasks
 
-### 5. Push and Create Merge Request
+### 5. Push and Create Pull Request
 
 ```bash
 # Push to your fork
 git push origin feature/your-feature-name
 
-# Create a merge request on GitLab
+# Create a pull request on GitHub
 # Include a clear description of changes
 # Reference related issues (e.g., "Closes #123")
 ```
@@ -302,9 +302,9 @@ cargo doc --all-features --no-deps --open
 
 ## Submitting Changes
 
-### Merge Request Checklist
+### Pull Request Checklist
 
-Before submitting a merge request, ensure:
+Before submitting a pull request, ensure:
 
 - [ ] Code follows Rust style guidelines
 - [ ] `cargo fmt` has been run
@@ -313,9 +313,9 @@ Before submitting a merge request, ensure:
 - [ ] New tests are added for new functionality
 - [ ] Documentation is updated
 - [ ] Commit messages are clear and descriptive
-- [ ] No merge conflicts with `main`
+- [ ] No merge conflicts with `master`
 
-### Merge Request Template
+### Pull Request Template
 
 ```markdown
 ## Description
@@ -347,7 +347,7 @@ Describe how you tested the changes.
 
 ### Review Process
 
-1. Submit merge request
+1. Submit pull request
 2. Automated CI checks run
 3. Maintainers review code
 4. Address feedback if needed
@@ -430,7 +430,7 @@ We follow [Semantic Versioning](https://semver.org/):
 
 ### Getting Help
 
-- **GitLab Issues:** Report bugs or request features
+- **GitHub Issues:** Report bugs or request features
 - **Discussions:** Ask questions or share ideas
 - **Email:** Contact maintainers directly for sensitive topics
 

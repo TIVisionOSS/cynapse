@@ -187,7 +187,7 @@ fn main() {
 
 ```bash
 # Clone the repository
-git clone https://gitlab.com/TIVisionOSS/crates/cynapse.git
+git clone https://github.com/TIVisionOSS/cynapse.git
 cd cynapse
 
 # Run tests
@@ -218,10 +218,10 @@ Developed for the Rust security ecosystem by **Tonmoy Infrastructure & Vision OS
 
 ## 📡 Links
 
-* **Repository:** [gitlab.com/TIVisionOSS/crates/cynapse](https://gitlab.com/TIVisionOSS/crates/cynapse)
+* **Repository:** [github.com/TIVisionOSS/cynapse](https://github.com/TIVisionOSS/cynapse)
 * **Crate:** [crates.io/crates/cynapse](https://crates.io/crates/cynapse)
 * **Docs:** [docs.rs/cynapse](https://docs.rs/cynapse)
-* **Issue Tracker:** [gitlab.com/TIVisionOSS/crates/cynapse/-/issues](https://gitlab.com/TIVisionOSS/crates/cynapse/-/issues)
+* **Issue Tracker:** [github.com/TIVisionOSS/cynapse/issues](https://github.com/TIVisionOSS/cynapse/issues)
 * **Security Policy:** [SECURITY.md](SECURITY.md)
 
 ---

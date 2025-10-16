@@ -12,7 +12,7 @@ We actively support the following versions of Cynapse with security updates:
 
 ## Reporting a Vulnerability
 
-**Please do not file public GitHub/GitLab issues for security vulnerabilities.**
+**Please do not file public GitHub issues for security vulnerabilities.**
 
 We take security seriously and appreciate responsible disclosure. If you discover a security vulnerability in Cynapse, please report it privately:
 
