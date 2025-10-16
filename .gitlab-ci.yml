@@ -1,0 +1,206 @@
+# GitLab CI/CD configuration for Cynapse
+
+stages:
+  - check
+  - test
+  - bench
+  - doc
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+  RUST_BACKTRACE: "1"
+
+# Cache cargo registry and build artifacts
+.cache_template: &cache_definition
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cargo/
+      - target/
+
+# Job templates
+.rust_job:
+  image: rust:latest
+  before_script:
+    - rustc --version
+    - cargo --version
+  <<: *cache_definition
+
+# === CHECK STAGE ===
+
+fmt:
+  extends: .rust_job
+  stage: check
+  script:
+    - rustup component add rustfmt
+    - cargo fmt -- --check
+  allow_failure: false
+
+clippy:
+  extends: .rust_job
+  stage: check
+  script:
+    - rustup component add clippy
+    - cargo clippy --all-targets --all-features -- -D warnings
+  allow_failure: false
+
+# === TEST STAGE ===
+
+test:linux:
+  extends: .rust_job
+  stage: test
+  script:
+    - cargo test --all-features --verbose
+    - cargo test --no-default-features --verbose
+  tags:
+    - linux
+
+test:linux:stable:
+  extends: .rust_job
+  stage: test
+  image: rust:latest
+  script:
+    - cargo test --all-features
+  tags:
+    - linux
+
+test:linux:beta:
+  extends: .rust_job
+  stage: test
+  image: rustlang/rust:nightly
+  script:
+    - cargo test --all-features
+  allow_failure: true
+  tags:
+    - linux
+
+# Miri for undefined behavior detection
+miri:
+  extends: .rust_job
+  stage: test
+  image: rustlang/rust:nightly
+  script:
+    - rustup component add miri
+    - cargo miri test --lib
+  allow_failure: true
+  tags:
+    - linux
+
+# Platform-specific tests
+test:integration:
+  extends: .rust_job
+  stage: test
+  script:
+    - cargo test --test integration --all-features
+  tags:
+    - linux
+
+test:platform:
+  extends: .rust_job
+  stage: test
+  script:
+    - cargo test --test platform_tests
+  tags:
+    - linux
+
+# === BENCH STAGE ===
+
+benchmark:
+  extends: .rust_job
+  stage: bench
+  script:
+    - cargo bench --no-fail-fast
+  artifacts:
+    paths:
+      - target/criterion/
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests
+  tags:
+    - linux
+
+# === DOC STAGE ===
+
+doc:
+  extends: .rust_job
+  stage: doc
+  script:
+    - cargo doc --no-deps --all-features
+    - cargo doc --document-private-items --no-deps --all-features
+  artifacts:
+    paths:
+      - target/doc/
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests
+
+doc:check:
+  extends: .rust_job
+  stage: doc
+  script:
+    - cargo doc --no-deps --all-features
+  variables:
+    RUSTDOCFLAGS: "-D warnings"
+
+# === COVERAGE (Optional) ===
+
+coverage:
+  extends: .rust_job
+  stage: test
+  image: rustlang/rust:nightly
+  before_script:
+    - rustup component add llvm-tools-preview
+    - cargo install grcov || true
+  script:
+    - export RUSTFLAGS="-C instrument-coverage"
+    - export LLVM_PROFILE_FILE="coverage-%p-%m.profraw"
+    - cargo test --all-features
+    - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing -o ./coverage/
+  artifacts:
+    paths:
+      - coverage/
+    expire_in: 1 week
+  coverage: '/\d+\.\d+%/'
+  allow_failure: true
+  only:
+    - main
+    - merge_requests
+  tags:
+    - linux
+
+# === SECURITY AUDIT ===
+
+audit:
+  extends: .rust_job
+  stage: check
+  script:
+    - cargo install cargo-audit || true
+    - cargo audit
+  allow_failure: true
+  only:
+    - schedules
+    - main
+
+# === RELEASE (Manual) ===
+
+publish:dry-run:
+  extends: .rust_job
+  stage: doc
+  script:
+    - cargo publish --dry-run --all-features
+  only:
+    - tags
+  when: manual
+
+publish:crates-io:
+  extends: .rust_job
+  stage: doc
+  script:
+    - cargo publish --token ${CRATES_IO_TOKEN}
+  only:
+    - tags
+  when: manual
+  environment:
+    name: crates.io

@@ -1,0 +1,65 @@
+[package]
+name = "cynapse"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tonmoy Infrastructure & Vision OSS"]
+description = "Real-time, memory-resident binary integrity verification for Rust applications"
+license = "MIT OR Apache-2.0"
+repository = "https://gitlab.com/TIVisionOSS/crates/cynapse"
+homepage = "https://gitlab.com/TIVisionOSS/crates/cynapse"
+documentation = "https://docs.rs/cynapse"
+readme = "README.md"
+keywords = ["security", "integrity", "anti-tamper", "memory", "hashing"]
+categories = ["cryptography", "os", "memory-management", "development-tools"]
+exclude = [".gitignore", "brief.md", ".gitlab-ci.yml"]
+
+[features]
+default = ["blake3-hash"]
+blake3-hash = ["blake3"]
+sha256-hash = ["sha2"]
+merkle = []
+forensics = []
+remote-attestation = ["ed25519-dalek", "rand", "serde", "serde_json"]
+kernel-assist = []
+
+[dependencies]
+# Core dependencies
+thiserror = "1.0"
+log = "0.4"
+cfg-if = "1.0"
+parking_lot = "0.12"
+
+# Hashing algorithms
+blake3 = { version = "1.5", optional = true }
+sha2 = { version = "0.10", optional = true }
+
+# Remote attestation
+ed25519-dalek = { version = "2.1", optional = true }
+rand = { version = "0.8", optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+
+# Platform-specific dependencies
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.52", features = [
+    "Win32_System_Memory",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_Threading",
+    "Win32_Foundation",
+] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+libc = "0.2"
+mach2 = "0.4"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+env_logger = "0.11"
+tempfile = "3.8"
+
+[[bench]]
+name = "performance"
+harness = false
